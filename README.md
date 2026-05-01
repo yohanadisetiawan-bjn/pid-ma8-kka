@@ -5,7 +5,7 @@ Percakapan baru
 Item Buatan Saya
 Notebook
 
-Panduan Sekolah Model Pembelajaran Mendalam, Koding, dan AI
+Panduan Sekolah Model Pembelajaran Mendalam, Koding, dan KA
 
 Strategi Konstruksi Pengetahuan dan Pemahaman Murid
 Notebook baru
@@ -22,7 +22,7 @@ Klasifikasi Konteks Pemanasan Global
 Analisa PDF dan Modul Ajar
 Aplikasi Teachable Machine Klasifikasi Gambar
 Pitakon Lanjutan Kurikulum Informatika
-Etika dan Hak Cipta Digital & AI
+Etika dan Hak Cipta Digital & KA
 Rencana Pelatihan Produksi Konten Digital
 Peran Orang Tua Dorong Berpikir Kritis
 
@@ -67,7 +67,7 @@ Pra Berkembang	< 34	Siswa masih miskonsepsi mengenai hak cipta. Wajib diberikan 
 Bagi guru yang ingin mengubah jalan cerita atau soal tanpa harus mengedit kode HTML, game ini dilengkapi fitur Unggah Data KA.
 
 Guru dapat membuat skenario baru menggunakan aplikasi Notepad (Windows) atau TextEdit (Mac) dengan format dasar seperti ini, lalu menyimpannya dengan ekstensi .txt:
-
+[code]
 JSON
 {
   "intro1": {
@@ -86,18 +86,18 @@ JSON
     ]
   }
 }
+[/code]
 Catatan: Pastikan blok pertama selalu diberi nama "intro1" agar game dapat memulai cerita dengan benar.
 
 Panduan ini bisa Anda simpan dalam format PDF atau disematkan langsung sebagai halaman pendahuluan sebelum siswa/guru mengakses file utama.
 
 Apakah Anda ingin saya buatkan draf skenario soal tambahan (file TXT/JSON) dengan topik spesifik lainnya, misalnya tentang keamanan siber atau perundungan siber (cyberbullying) untuk siswa jenjang SMP?
 
-kembangkan soal file txt ini menjadi 25 soal yang memuat etika dan hak cipta sesuai bahan bacaan pada file pdf
-
 Berikut adalah berkas JSON berisi 25 soal skenario gamifikasi yang telah dikembangkan secara komprehensif berdasarkan materi Etika Digital dan Hak Cipta. Setiap jawaban benar bernilai 4 poin (total skor maksimal 100).
 
 Anda dapat menyalin seluruh kode di bawah ini dan menyimpannya sebagai file quest-etika.txt atau quest-etika.json, lalu mengunggahnya langsung ke dalam game simulasi Akademi Kreator.
 
+[code]
 JSON
 {
   "intro1": {
@@ -658,9 +658,8 @@ JSON
     ]
   }
 }
-berdasarkan 2 file html ini buatkan file Readme.md untuk github
+[/code]
 
-Fail README.md anda telah sedia.
 Ikon MD
  README 
 MD
@@ -668,11 +667,6 @@ MD
 Dokumen ini direka khusus untuk repositori GitHub anda. Maklumat mengenai keterangan modul ("Petualangan Kreator Digital Beretika" dan "Arena Etika Digital"), panduan penggunaan luar talian, serta perincian pelesenan (MIT untuk kod sumber dan CC BY-NC 4.0 untuk kandungan pembelajaran) telah disatukan secara terperinci dan profesional di dalamnya. Anda boleh memuat naik fail ini secara terus ke repositori anda.
 
 Konten yang Anda upload mungkin terlalu besar sehingga hasil tidak akan maksimal. Pelajari lebih lanjutTerbuka di jendela baru
-
-
-
-
-Gemini adalah AI dan dapat melakukan kesalahan.
 
 # Gamifikasi Pembelajaran KKA: Etika dan Hak Cipta
 
