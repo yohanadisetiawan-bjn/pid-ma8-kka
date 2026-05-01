@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<!-- 
+========================================================================
+PROJECT: Gamifikasi Pembelajaran KKA Kelas 8 (Materi Etika dan Hak Cipta)
+AUTHOR: Yohan Adi Setiawan <yohansetiawan61@guru.smp.belajar.id>
+RELEASE: 2 Mei 2026
+VERSION: 1.0.0
+========================================================================
+
+PEMBERITAHUAN LISENSI GANDA:
+1. KODE SUMBER (HTML, CSS, JS) berlisensi di bawah MIT License.
+2. KONTEN (Teks, Materi, Aset Media) berlisensi di bawah CC BY-NC 4.0.
+
+------------------------------------------------------------------------
+[MIT LICENSE - Untuk Kode Sumber]
+Copyright (c) 2026 Yohan Adi Setiawan
+
+Izin diberikan secara gratis kepada siapa pun untuk menggunakan, menyalin, 
+memodifikasi, dan mendistribusikan perangkat lunak ini tanpa batasan.
+Perangkat lunak ini disediakan "APA ADANYA", tanpa jaminan apa pun.
+
+------------------------------------------------------------------------
+[CC BY-NC 4.0 - Untuk Konten Pembelajaran]
+Atribusi — Anda harus memberikan kredit yang sesuai.
+NonKomersial — Anda tidak dapat menggunakan materi ini untuk tujuan komersial.
+Detail: https://creativecommons.org/licenses/by-nc/4.0/
+========================================================================
+-->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Kreator Digital Beretika</title>
+    <style>
+	/* 1. Import Font Online dari Google Fonts (sebagai cadangan) */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        
+        /* 2. Deklarasi Font Offline lokal dengan alias 'Poppins Local' */
+        @font-face {
+            font-family: 'Poppins Local';
+            src: local('Poppins'), local('Poppins-Regular'), url('fonts/Poppins-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Poppins Local';
+            src: local('Poppins SemiBold'), local('Poppins-SemiBold'), url('fonts/Poppins-SemiBold.ttf') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Poppins Local';
+            src: local('Poppins ExtraBold'), local('Poppins-ExtraBold'), url('fonts/Poppins-ExtraBold.ttf') format('truetype');
+            font-weight: 800;
+            font-style: normal;
+        }
+
+
+        :root {
+            /* Pastel & Professional Color Palette */
+            --bg-color: #f8f9fa; 
+            --primary: #9bb1ff; /* Pastel dusty blue */
+            --primary-dark: #7a94f0;
+            --secondary: #e2c2ff; /* Pastel lavender */
+            --accent: #b8e0d2; /* Pastel sage green (Success) */
+            --danger: #ffb3b3; /* Pastel red (Fail) */
+            --warning: #ffd6a5; /* Pastel orange */
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* Tambahkan fallback system font untuk offline mode */
+            font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            background-image: radial-gradient(rgba(155, 177, 255, 0.3) 2px, transparent 2px);
+            background-size: 40px 40px;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 900px;
+            height: 95vh;
+            max-height: 800px;
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- UI STATS BAR --- */
+        .stats-bar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            z-index: 5;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .player-info { display: flex; align-items: center; gap: 15px; }
+        .avatar {
+            width: 45px; height: 45px; background-color: white; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            color: var(--primary); font-size: 24px; border: 3px solid rgba(255,255,255,0.6);
+        }
+        .stats-details h2 { font-size: 1.1rem; margin-bottom: 2px; }
+        .badge-level { font-size: 0.75rem; background: rgba(255,255,255,0.25); padding: 3px 10px; border-radius: 12px; }
+        
+        .exp-container { width: 160px; text-align: right; }
+        .exp-bar { height: 8px; background-color: rgba(255,255,255,0.3); border-radius: 4px; margin-top: 5px; overflow: hidden; }
+        .exp-fill { height: 100%; background-color: #fff; width: 0%; transition: width 0.5s ease; }
+        .exp-text { font-size: 0.8rem; font-weight: 600; }
+
+        /* --- VISUAL NOVEL SCREEN --- */
+        .vn-screen {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background: #fdfcfb;
+            overflow: hidden;
+        }
+
+        .vn-background {
+            flex: 1;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            transition: background 0.5s ease;
+            min-height: 150px;
+        }
+
+        /* NPC Sprite */
+        .npc-sprite {
+            width: 200px;
+            height: 200px;
+            background: var(--primary);
+            border-radius: 50% 50% 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 30px;
+            font-size: 90px;
+            color: white;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 8px solid white;
+            border-bottom: none;
+        }
+
+        .npc-sprite.slide-in {
+            animation: slideUp 0.5s forwards;
+        }
+
+        /* Dialogue Box Wrapper */
+        .dialogue-wrapper {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .npc-name {
+            position: absolute;
+            top: -50px; /* Dinaikkan ke atas garis dialog */
+            left: 30px; 
+            background: var(--primary-dark);
+            color: white;
+            padding: 8px 30px;
+            border-radius: 20px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            border: 3px solid #ffffff;
+            transition: background 0.3s, left 0.3s;
+            z-index: 20;
+            white-space: nowrap;
+        }
+
+        /* Dialogue Box Area */
+        .dialogue-area {
+            background: white;
+            padding: 25px 30px;
+            border-top: 4px solid var(--primary);
+            box-shadow: 0 -10px 20px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            max-height: 55vh;
+            overflow-y: auto; /* Scroll hanya berlaku di area ini, tidak memotong nama npc */
+        }
+
+        .dialogue-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            flex-shrink: 0;
+            margin-top: 10px;
+        }
+
+        /* Opsi Jawaban Fleksibel */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn-option {
+            background-color: #ffffff;
+            border: 2px solid var(--primary);
+            padding: 14px 20px;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 10px rgba(155, 177, 255, 0.15);
+            height: auto;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        .btn-option:hover {
+            background-color: var(--primary);
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(155, 177, 255, 0.4);
+        }
+
+        .btn-option .icon-emoji { 
+            font-size: 1.3rem;
+            background: rgba(155, 177, 255, 0.2);
+            padding: 8px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            min-width: 35px; /* Mencegah ikon menyusut saat teks panjang */
+            transition: all 0.3s;
+        }
+        
+        .btn-option:hover .icon-emoji {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- CERTIFICATE SCREEN --- */
+        .certificate-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .cert-container {
+            width: 100%;
+            height: 100%;
+            border: 15px solid var(--primary);
+            border-radius: 10px;
+            padding: 10px;
+            background: #fff;
+            position: relative;
+        }
+
+        .cert-inner {
+            border: 2px dashed var(--primary-dark);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            background: radial-gradient(circle at center, rgba(226, 194, 255, 0.1) 0%, transparent 70%);
+            overflow-y: auto;
+        }
+
+        .cert-header {
+            font-family: 'Playfair Display', Georgia, "Times New Roman", serif; /* Fallback offline font */
+            font-size: 3rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .cert-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cert-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 5px;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        .cert-predikat {
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 10px 30px;
+            border-radius: 30px;
+            margin: 15px 0;
+            display: inline-block;
+        }
+
+        /* Predikat Colors */
+        .p-unggul { background: var(--accent); color: #1e5631; }
+        .p-maju { background: var(--primary); color: #0a2472; }
+        .p-berkembang { background: var(--warning); color: #783f04; }
+        .p-praberkembang { background: var(--danger); color: #780000; }
+
+        .cert-desc {
+            font-size: 1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .cert-seal {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 90px;
+            height: 90px;
+            background: var(--warning);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .cert-seal::after {
+            content: '';
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            border: 2px dashed var(--warning);
+            border-radius: 50%;
+        }
+
+        .btn-restart {
+            margin-top: 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .btn-restart:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+        /* Initial Login Screen */
+        #start-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 30; padding: 40px; text-align: center;
+        }
+        .hero-icon { font-size: 5rem; margin-bottom: 20px; }
+        #start-screen h1 { color: var(--text-dark); margin-bottom: 10px; font-size: 2rem; }
+        #start-screen p { color: var(--text-light); margin-bottom: 30px; }
+        .input-group input {
+            width: 300px; padding: 15px; border: 2px solid #eee; border-radius: 12px;
+            font-size: 1rem; text-align: center; margin-bottom: 20px; outline: none;
+        }
+        .input-group input:focus { border-color: var(--primary); }
+        .btn-primary {
+            background-color: var(--primary); color: white; border: none; padding: 15px 40px;
+            border-radius: 30px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .btn-primary:hover { background-color: var(--primary-dark); transform: translateY(-3px); }
+
+        .file-upload-wrapper {
+            margin-bottom: 20px;
+            text-align: left;
+            width: 100%;
+            max-width: 300px;
+        }
+        .file-upload-wrapper label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+            display: block;
+        }
+        .file-upload-wrapper input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px dashed var(--primary);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(20px); opacity: 1; } }
+        .fade-in { animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .hide { display: none !important; }
+
+        /* Media Queries untuk Layar Handphone & Ukuran Kecil */
+        @media (max-width: 600px) {
+            .game-container {
+                height: 100vh;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+            .dialogue-area {
+                padding: 20px 15px;
+                max-height: 60vh; 
+            }
+            .npc-name {
+                top: -42px; /* Penyesuaian proporsional di mobile */
+                left: 15px;
+                padding: 5px 20px;
+                font-size: 1rem;
+            }
+            .npc-sprite {
+                width: 140px;
+                height: 140px;
+                font-size: 60px;
+                padding-top: 15px;
+            }
+            .cert-header {
+                font-size: 2rem;
+            }
+            .cert-name {
+                font-size: 1.8rem;
+                min-width: 200px;
+            }
+            .cert-seal {
+                width: 70px;
+                height: 70px;
+                font-size: 25px;
+                bottom: 15px;
+                right: 15px;
+            }
+            .cert-seal::after {
+                width: 85px;
+                height: 85px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <div class="hero-icon">🎮</div>
+            <h1>Akademi Kreator</h1>
+            <p>Selesaikan Kasus Etika Digital Bersama Novita-KA dan Dapatkan Predikatmu!</p>
+            <div class="input-group">
+                <input type="text" id="playerName" placeholder="Ketik namamu di sini..." autocomplete="off">
+            </div>
+            <div class="file-upload-wrapper">
+                <label for="questFile">Unggah Data KA (format txt), sebagai otak KA:</label>
+                <input type="file" id="questFile" accept=".txt, .json">
+            </div>
+            <button class="btn-primary" onclick="startGame()">Mulai Simulasi</button>
+        </div>
+
+        <!-- Header / Stats -->
+        <div class="stats-bar hide" id="game-ui-header">
+            <div class="player-info">
+                <div class="avatar">🎓</div>
+                <div class="stats-details">
+                    <h2 id="ui-name">Player</h2>
+                    <span class="badge-level" id="ui-level">Status: Dalam Penilaian</span>
+                </div>
+            </div>
+            <div class="exp-container">
+                <div class="exp-text">Nilai Etika: <span id="ui-exp">0</span></div>
+                <div class="exp-bar">
+                    <div class="exp-fill" id="ui-exp-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main VN Screen -->
+        <div class="vn-screen hide" id="game-ui-main">
+            <!-- Background & Character -->
+            <div class="vn-background" id="vn-background">
+                <div class="npc-sprite slide-in" id="npc-sprite">
+                    🤖
+                </div>
+            </div>
+
+            <!-- Dialogue Area -->
+            <div class="dialogue-wrapper">
+                <div class="npc-name" id="npc-name">Novita (KA)</div>
+		<div class="dialogue-area">
+                	<div class="dialogue-text" id="dialogue-text">Memuat simulasi...</div>
+                
+                	<div class="options-container" id="options-container">
+                    		<!-- Options injected via JS -->
+                	</div>
+		</div>
+            </div>
+        </div>
+
+        <!-- Certificate Screen -->
+        <div class="certificate-screen hide" id="certificate-screen">
+            <div class="cert-container">
+                <div class="cert-inner">
+                    <div class="cert-header">Sertifikat Penghargaan</div>
+                    <div class="cert-subtitle">Diberikan secara resmi kepada:</div>
+                    
+                    <div class="cert-name" id="cert-name-display">Nama Player</div>
+                    
+                    <div class="cert-desc">Telah menyelesaikan Pra Asesmen Sumatif Audit Etika dan Hak Cipta Karya Digital dengan predikat pencapaian:</div>
+                    
+                    <div class="cert-predikat" id="cert-predikat-display">Unggul</div>
+                    
+                    <div class="cert-desc" id="cert-desc-display">
+                        Murid mampu menganalisis hak cipta dan melakukan audit secara tepat. Diizinkan melanjutkan ke tahap asesmen sumatif secara mandiri!
+                    </div>
+
+                    <div class="cert-seal">
+                         🏆
+                    </div>
+
+                    <button class="btn-restart" onclick="location.reload()">Main Lagi / Refleksi</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Game State
+        let player = {
+            name: "",
+            score: 0
+        };
+
+        // Character Themes
+        const CHARACTERS = {
+            "Novita (KA)": { icon: "🤖", color: "var(--primary)", bg: "#eef2ff" },
+            "Praditya (Agent-KA)": { icon: "🥷", color: "var(--warning)", bg: "#fff6ec" },
+            "Dzakir (Agent-KA)": { icon: "🦖", color: "var(--secondary)", bg: "#f9f2ff" },
+            "Kamu": { icon: "👤", color: "var(--accent)", bg: "#f0fdf4" }
+        };
+
+        // State untuk menyimpan data cerita aktif
+        let storyData = {};
+
+        // Default Story Data Structure (Cadangan)
+        const defaultStoryData = {
+            "intro1": {
+                npc: "Novita (KA)",
+                text: "Halo! Selamat datang di Akademi Kreator. Aku Novita, KA Pendampingmu. Hari ini kita akan berkeliling menemui teman-temanmu yang sedang kebingungan masalah etika digital.",
+                options: [
+                    { text: "Halo Novita! Aku siap membantu mereka.", next: "q1_Praditya" }
+                ]
+            },
+            "q1_Praditya": {
+                npc: "Praditya (Agent-KA)",
+                text: "Hei bro/sis! Liat nih tugas video KKA-ku. Aku pakai lagu pop Indonesia dari Spotify full dari awal sampai akhir buat backsound. Keren kan? Kan cuma buat tugas sekolah, jadi bebas Hak Cipta dong?",
+                options: [
+                    { text: "Bebas kok! Asal nggak kamu jual, aman aja pakai lagu apa saja.", next: "q1_wrong", score: 0 },
+                    { text: "Hati-hati Praditya, meski buat tugas, pakai lagu utuh tanpa izin itu melanggar Hak Cipta lho.", next: "q1_correct", score: 34 }
+                ]
+            },
+            "q1_wrong": {
+                npc: "Novita (KA)",
+                text: "Tunggu dulu! Tanggapanmu kurang tepat. Meskipun untuk pendidikan (tugas sekolah), menggunakan karya utuh milik orang lain tanpa izin tetap melanggar Hak Cipta (Copyright). Lebih baik sarankan Praditya memakai musik bebas royalti (Creative Commons).",
+                options: [
+                    { text: "Oh, begitu. Maaf Praditya, kamu harus ganti lagunya! Lanjut ke Dzakir yuk.", next: "q2_Dzakir" }
+                ]
+            },
+            "q1_correct": {
+                npc: "Novita (KA)",
+                text: "Tepat sekali! Saranmu sangat bagus. Pencipta lagu memiliki hak eksklusif. Untuk tugas yang akan diunggah, lebih aman menggunakan musik berlisensi Creative Commons.",
+                options: [
+                    { text: "Sama-sama Praditya. Yuk lanjut temui Dzakir!", next: "q2_Dzakir" }
+                ]
+            },
+            "q2_Dzakir": {
+                npc: "Dzakir (Agent-KA)",
+                text: "Akhirnya tugasku selesai! Aku nemu artikel bagus banget di blog orang. Jadi aku copy-paste aja semua paragrafnya persis, terus aku ganti nama penulisnya pakai namaku biar dapet nilai A.",
+                options: [
+                    { text: "Dzakir, itu namanya Plagiarisme! Itu penjiplakan dan melanggar etika akademik.", next: "q2_correct", score: 33 },
+                    { text: "Wah, idemu cerdas juga Dzakir. Cari inspirasi emang gampang di internet.", next: "q2_wrong", score: 0 }
+                ]
+            },
+            "q2_wrong": {
+                npc: "Novita (KA)",
+                text: "Awas! Mengambil ide orang lain lalu diolah dengan bahasa sendiri itu namanya *inspirasi*. Tapi kalau menyalin persis (Copy-Paste) dan mengaku itu karyamu, itu adalah *Plagiarisme*. Itu pelanggaran berat!",
+                options: [
+                    { text: "Aku baru paham bedanya. Dzakir, jangan lakukan itu! Lanjut Novita.", next: "q3_Novita" }
+                ]
+            },
+            "q2_correct": {
+                npc: "Novita (KA)",
+                text: "Luar biasa! Plagiarisme adalah 'dosa besar' dalam dunia kreator dan akademik. Menghargai orisinalitas karya orang lain sama dengan menghargai diri sendiri.",
+                options: [
+                    { text: "Tentu saja! Apa tantangan terakhir kita, Novita?", next: "q3_Novita" }
+                ]
+            },
+            "q3_Novita": {
+                npc: "Novita (KA)",
+                text: "Sekarang giliranmu. Jika kamu mendownload ilustrasi dari Freepik atau Unsplash yang mewajibkan 'Attribution', bagaimana cara kamu memberikan atribusi/sitasi yang etis?",
+                options: [
+                    { text: "Cukup tulis 'Sumber: Google' atau 'Sumber: Internet'.", next: "q3_wrong", score: 0 },
+                    { text: "Tuliskan Nama Kreator asli, Judul Karya, dan link (tautan) ke sumber aslinya.", next: "q3_correct", score: 33 }
+                ]
+            },
+            "q3_wrong": {
+                npc: "Novita (KA)",
+                text: "Kurang tepat. Google hanya mesin pencari, bukan penciptanya. Audit atribusi yang baik harus mencantumkan nama kreator secara spesifik agar mereka mendapat apresiasi.",
+                options: [
+                    { text: "Selesai. Mari lihat hasil predikatku!", next: "ending" }
+                ]
+            },
+            "q3_correct": {
+                npc: "Novita (KA)",
+                text: "Sempurna! Atribusi yang jelas dan transparan adalah standar emas kreator beretika. Kamu sudah menguasai konsep ini dengan sangat baik.",
+                options: [
+                    { text: "Selesai. Mari lihat hasil predikatku!", next: "ending" }
+                ]
+            }
+        };
+
+        function startGame() {
+            const nameInput = document.getElementById('playerName').value;
+            if (nameInput.trim() === "") {
+                alert("Tolong masukkan namamu ya!");
+                return;
+            }
+            player.name = nameInput;
+            document.getElementById('ui-name').innerText = player.name;
+            
+            const fileInput = document.getElementById('questFile');
+            if (fileInput.files.length > 0) {
+                // Membaca file txt/json yang diunggah
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        storyData = JSON.parse(e.target.result);
+                        initGameUI();
+                    } catch (error) {
+                        alert("Format JSON tidak valid! Sistem akan menggunakan quest bawaan.");
+                        storyData = defaultStoryData;
+                        initGameUI();
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                // Jika tidak ada file, gunakan quest bawaan
+                storyData = defaultStoryData;
+                initGameUI();
+            }
+        }
+
+        // Fungsi untuk mengacak array (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function initGameUI() {
+            document.getElementById('start-screen').classList.add('hide');
+            document.getElementById('game-ui-header').classList.remove('hide');
+            document.getElementById('game-ui-main').classList.remove('hide');
+
+            // Pastikan objek JSON memiliki kunci awal "intro1"
+            if (!storyData["intro1"]) {
+                alert("Data JSON harus memiliki awalan kunci 'intro1'. Kembali ke quest bawaan.");
+                storyData = defaultStoryData;
+            }
+
+	   // Acak opsi jawaban untuk semua scene secara global saat game baru dimulai
+            for (let key in storyData) {
+                if (storyData[key].options && storyData[key].options.length > 1) {
+                    shuffleArray(storyData[key].options);
+                }
+            }
+
+            renderScene("intro1");
+        }
+
+        function renderScene(sceneId) {
+            if (sceneId === "ending") {
+                showCertificate();
+                return;
+            }
+
+            const scene = storyData[sceneId];
+            const charData = CHARACTERS[scene.npc] || CHARACTERS["Novita (Mentor)"];
+
+            // Update UI Colors & Character
+            const bgEl = document.getElementById('vn-background');
+            const spriteEl = document.getElementById('npc-sprite');
+            const nameEl = document.getElementById('npc-name');
+
+            bgEl.style.backgroundColor = charData.bg;
+            
+            // Re-trigger animation
+            spriteEl.classList.remove('slide-in');
+            void spriteEl.offsetWidth; // trigger reflow
+            spriteEl.classList.add('slide-in');
+            
+            spriteEl.style.backgroundColor = charData.color;
+            spriteEl.innerHTML = charData.icon;
+            
+            nameEl.innerText = scene.npc;
+            nameEl.style.backgroundColor = charData.color;
+            
+            // Text Writer
+            document.getElementById('dialogue-text').innerText = scene.text;
+
+            // Render Options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = "";
+            
+            scene.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-option fade-in';
+                btn.style.animationDelay = `${0.1 * index}s`;
+                
+                let icon = opt.text.includes("Selesai") ? "🏁" : "💬";
+                btn.innerHTML = `<span class="icon-emoji">${icon}</span> ${opt.text}`;
+                
+                btn.onclick = () => handleOptionClick(opt);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleOptionClick(option) {
+            if (option.score !== undefined) {
+                player.score += option.score;
+                if(player.score > 100) player.score = 100; // Cap at 100
+                updateUI();
+            }
+            renderScene(option.next);
+        }
+
+        function updateUI() {
+            document.getElementById('ui-exp').innerText = player.score;
+            document.getElementById('ui-exp-fill').style.width = `${player.score}%`;
+        }
+
+        function showCertificate() {
+            document.getElementById('game-ui-header').classList.add('hide');
+            document.getElementById('game-ui-main').classList.add('hide');
+            document.getElementById('certificate-screen').classList.remove('hide');
+
+            document.getElementById('cert-name-display').innerText = player.name;
+            
+            let predikatText = "";
+            let predikatClass = "";
+            let descText = "";
+
+            // Kriteria Penilaian: Pra Berkembang, Berkembang, Maju, Unggul
+            if (player.score >= 90) {
+                predikatText = "UNGGUL";
+                predikatClass = "p-unggul";
+                descText = "Sangat luar biasa! Anda mampu menganalisis hak cipta dan melakukan audit secara tepat dan reflektif. Diizinkan melanjutkan ke tahap asesmen sumatif secara mandiri.";
+            } else if (player.score >= 66) {
+                predikatText = "MAJU";
+                predikatClass = "p-maju";
+                descText = "Kerja bagus! Anda memahami konsep dasar dan mampu menavigasi etika dengan baik. Silakan perbaiki sedikit detail atribusimu sebelum mengumpulkan tugas akhir.";
+            } else if (player.score >= 34) {
+                predikatText = "BERKEMBANG";
+                predikatClass = "p-berkembang";
+                descText = "Menuju arah yang benar! Anda mulai memahami konsep, namun masih perlu berlatih membedakan inspirasi dan plagiarisme. Mari diskusikan kembali dengan guru.";
+            } else {
+                predikatText = "PRA BERKEMBANG";
+                predikatClass = "p-praberkembang";
+                descText = "Jangan menyerah! Anda masih kesulitan membedakan etika dan hukum hak cipta. Wajib mengikuti sesi bimbingan (re-teaching) bersama guru sebelum mengambil nilai sumatif.";
+            }
+
+            const predikatEl = document.getElementById('cert-predikat-display');
+            predikatEl.innerText = predikatText;
+            predikatEl.className = `cert-predikat ${predikatClass}`;
+            
+            document.getElementById('cert-desc-display').innerText = descText;
+        }
+    </script>
+</body>
+</html>
