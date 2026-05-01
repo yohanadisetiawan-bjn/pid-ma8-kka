@@ -1,4 +1,4 @@
-# pid-ma8-kka
+# Panduan Projek PID KKA Kelas 8
 Gemini
 Panduan Gamifikasi Etika Digital HTML
 Percakapan baru
